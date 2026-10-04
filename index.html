@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>برنامج توزيع الطحين</title>
+<style>
+:root{--p:#0f766e;--p2:#115e59;--gold:#d6a83b;--bg:#f5f7fa;--card:#fff;--txt:#17212b;--muted:#6b7280;--line:#e5e7eb;--ok:#15803d;--warn:#b45309;--danger:#b91c1c;--shadow:0 8px 28px rgba(15,23,42,.07)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--txt);font-family:"Noto Sans Arabic",Tahoma,Arial,sans-serif;line-height:1.65}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{min-height:100vh}.top{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--p2),var(--p));color:#fff;padding:14px 14px 12px;box-shadow:0 3px 16px rgba(0,0,0,.12)}.topbar{max-width:760px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px}.brand{display:flex;align-items:center;gap:10px}.logo{width:42px;height:42px;border-radius:14px;background:#fff2;border:1px solid #ffffff3d;display:grid;place-items:center;font-size:22px}.brand h1{font-size:18px;margin:0;font-weight:800}.brand small{display:block;font-size:11px;opacity:.8}.sync-dot{width:10px;height:10px;border-radius:50%;background:#86efac;box-shadow:0 0 0 4px #ffffff18}.nav{position:sticky;top:70px;z-index:19;background:#fff;border-bottom:1px solid var(--line);overflow:auto}.nav-inner{max-width:760px;margin:auto;display:flex;gap:6px;padding:8px 10px}.nav button{flex:0 0 auto;border:0;background:#f1f5f9;color:#475569;border-radius:12px;padding:9px 13px;font-size:13px}.nav button.active{background:var(--p);color:#fff}.main{max-width:760px;margin:auto;padding:14px}.page{display:none}.page.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:12px;box-shadow:var(--shadow)}.hero{background:linear-gradient(135deg,#ffffff,#f0fdfa);border-color:#b8e4de}.title{font-size:20px;font-weight:800;margin:0 0 5px}.subtitle{color:var(--muted);font-size:13px;margin:0 0 14px}.label{display:block;font-size:13px;color:#475569;margin:10px 0 5px;font-weight:700}.input,.select,.textarea{width:100%;border:1px solid #d1d5db;border-radius:12px;padding:11px 12px;background:#fff;color:var(--txt);outline:none}.input:focus,.select:focus,.textarea:focus{border-color:var(--p);box-shadow:0 0 0 3px #0f766e18}.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:800}.btn-primary{background:var(--p);color:#fff}.btn-secondary{background:#e2e8f0;color:#1e293b}.btn-gold{background:#f2dfad;color:#6b4c08}.btn-danger{background:#fee2e2;color:#991b1b}.btn-ok{background:#dcfce7;color:#166534}.full{width:100%}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1;min-width:130px}.search{margin-bottom:12px}.family{border-radius:18px;border:1px solid var(--line);background:#fff;padding:15px;margin-bottom:11px;box-shadow:var(--shadow)}.family-name{font-size:18px;font-weight:900;margin-bottom:8px}.detail{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed #e5e7eb}.detail:last-child{border-bottom:0}.detail span{color:var(--muted);font-size:13px}.detail b{font-size:15px;text-align:left}.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800}.pill-ok{background:#dcfce7;color:#166534}.pill-warn{background:#fef3c7;color:#92400e}.pill-red{background:#fee2e2;color:#991b1b}.empty{text-align:center;color:var(--muted);padding:30px 10px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;box-shadow:var(--shadow)}.stat span{display:block;color:var(--muted);font-size:12px}.stat b{display:block;font-size:21px;margin-top:3px}.stat-btn{width:100%;text-align:right;border:1px solid var(--line);cursor:pointer}.stat-btn:active{transform:scale(.99)}.note{background:#fffbeb;border:1px solid #fde68a;border-radius:13px;padding:10px;color:#92400e;font-size:12px}.success{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:13px;padding:10px;color:#166534;font-size:12px}.dangerbox{background:#fef2f2;border:1px solid #fecaca;border-radius:13px;padding:10px;color:#991b1b;font-size:12px}.checkline{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:#f8fafc;margin-top:8px}.checkline input{width:21px;height:21px;accent-color:var(--p)}.var-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.var-actions button{padding:11px 6px}.modal{position:fixed;inset:0;background:#0008;z-index:50;display:none;align-items:flex-end;justify-content:center}.modal.show{display:flex}.modal-box{width:100%;max-width:760px;background:#fff;border-radius:22px 22px 0 0;padding:18px;max-height:85vh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.close{border:0;background:#f1f5f9;border-radius:10px;padding:7px 10px}.small{font-size:12px;color:var(--muted)}.money{font-variant-numeric:tabular-nums}.print-area{display:none}@media print{body>*:not(#printArea){display:none!important}.print-area{display:block;padding:24px;font-family:"Noto Sans Arabic",Tahoma,Arial,sans-serif;direction:rtl}.print-area h1{font-size:24px;margin-bottom:8px}.print-area .family{box-shadow:none;break-inside:avoid}.print-area .family-name{font-size:18px}.print-area .detail{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #ddd}}@media(min-width:700px){.modal{align-items:center}.modal-box{border-radius:22px;width:92%}}
+@media print{body{background:#fff}.top,.nav,.no-print{display:none!important}.main{max-width:none;padding:0}.page{display:none!important}.print-area{display:block}.print-area .family{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div class="topbar"><div class="brand"><div class="logo">🌾</div><div><h1>برنامج توزيع الطحين</h1><small>إدارة العوائل والتوزيع الشهري</small></div></div><div id="syncDot" class="sync-dot" title="محلي"></div></div></header>
+<nav class="nav"><div class="nav-inner" id="nav"><button data-page="home" class="active">الرئيسية</button><button data-page="families">العوائل</button><button data-page="distribution">التوزيع</button><button data-page="stats">الإحصائيات</button><button data-page="settings">الإعدادات</button></div></nav>
+<main class="main">
+<section id="home" class="page active">
+<div class="card hero"><h2 class="title">إضافة عائلة</h2><p class="subtitle">أدخل البيانات الأساسية فقط، والحسابات تُنجز تلقائياً.</p>
+<label class="label">اسم رب الأسرة *</label><input class="input" id="addName" placeholder="مثال: أحمد محمد علي">
+<label class="label">عدد أفراد الأسرة *</label><input class="input" id="addMembers" type="number" min="1" step="1" placeholder="مثال: 4">
+<label class="label">الملاحظات إن وجدت</label><textarea class="textarea" id="addNotes" rows="3" placeholder="ملاحظة اختيارية"></textarea>
+<button class="btn btn-primary full" onclick="addFamily()">＋ إضافة العائلة</button></div>
+<div class="success">الحساب الثابت: كل فرد = 9 كغم طحين + 250 دينار عراقي، وكيس الطحين = 50 كغم.</div>
+</section>
+
+<section id="families" class="page">
+<div class="card"><h2 class="title">بيانات العوائل</h2><p class="subtitle">ابحث باسم رب الأسرة، وستظهر كل التفاصيل بشكل طولي.</p><input class="input search" id="familySearch" oninput="renderFamilies()" placeholder="🔎 بحث عن رب الأسرة"></div>
+<div id="familyList"></div>
+</section>
+
+<section id="distribution" class="page">
+<div class="card"><h2 class="title">إعداد التوزيع</h2><p class="subtitle">تُملأ مرة واحدة لكل شهر/توزيع.</p>
+<div class="row"><div><label class="label">الشهر والسنة *</label><input class="input" id="distMonth" type="month" onchange="onDistributionPeriodChange()"></div><div><label class="label">اسم الموزع *</label><input class="input" id="distributor" placeholder="اسم الموزع"></div></div>
+<div class="detail"><span>التاريخ</span><b id="distDate">—</b></div><div class="detail"><span>الوقت</span><b id="distTime">—</b></div>
+<button class="btn btn-primary full" onclick="saveDistributionSetup()">حفظ بيانات التوزيع</button></div>
+<input class="input search" id="distSearch" oninput="renderDistribution()" placeholder="🔎 بحث عن رب الأسرة للتوزيع">
+<div id="distList"></div>
+<div class="card"><h3 class="title" style="font-size:17px">مستحقات غير مستلمة</h3><div id="outstandingList"></div></div>
+</section>
+
+<section id="stats" class="page">
+<div class="card"><h2 class="title">الإحصائيات</h2><p class="subtitle">اختر فترة التوزيع لعرض الأرقام والطباعة.</p><input class="input" id="statsMonth" type="month" onchange="renderStats()"></div>
+<div id="statsCards" class="stats"></div>
+<div class="card">
+  <div id="statsCategoryButtons" style="display:flex;flex-direction:column;gap:10px"></div>
+</div>
+<div class="card"><div class="row"><button class="btn btn-ok" onclick="printCategory('full')">طباعة المستلمين بالكامل PDF</button><button class="btn btn-gold" onclick="printCategory('partial')">طباعة المستلمين جزئياً PDF</button></div><div class="row" style="margin-top:8px"><button class="btn btn-danger" onclick="printCategory('none')">طباعة غير المستلمين PDF</button><button class="btn btn-secondary" onclick="printCategory('all')">طباعة جميع الأسر PDF</button></div><div class="note" style="margin-top:9px">من شاشة الطباعة اختر «حفظ كملف PDF» إذا كان خيار الطباعة متاحاً في الهاتف.</div></div>
+<div id="statsLists"></div>
+</section>
+
+<section id="settings" class="page">
+<div class="card"><h2 class="title">الإعدادات والنسخ الاحتياطي</h2><p class="subtitle">البيانات تُحفظ محلياً على الهاتف. يمكنك إنشاء نسخة واستعادتها.</p>
+<button class="btn btn-primary full" onclick="exportBackup()">⬇ إنشاء نسخة احتياطية</button>
+<label class="label">استعادة نسخة من الهاتف</label><input class="input" type="file" accept="application/json,.json" onchange="importBackup(event)">
+</div>
+<div class="card"><h2 class="title" style="font-size:17px">☁️ Google Drive — النسخ الاحتياطي والمزامنة</h2>
+<div class="success">Google Drive فقط — لا توجد Google Sheets ولا Apps Script.</div>
+<div class="checkline"><div><b>حالة الحساب</b><div class="small" id="driveStatus">غير مرتبط</div></div><span id="driveBadge" class="pill pill-warn">غير مرتبط</span></div>
+<div class="row" style="margin-top:10px"><button class="btn btn-primary" onclick="connectGoogleDrive()">🔐 ربط Google Drive</button><button class="btn btn-secondary" onclick="disconnectGoogleDrive()">فصل الحساب</button></div>
+<div class="row" style="margin-top:8px"><button class="btn btn-ok" onclick="driveBackup(false)">☁ نسخ احتياطي الآن</button><button class="btn btn-gold" onclick="driveRestore()">↩ استعادة من Drive</button></div>
+<div class="note" style="margin-top:10px">هذه النسخة تجهز الواجهة وجسر Android. لكي يعمل الربط الحقيقي داخل APK يجب أن يكون برنامج التغليف داعماً لـ Google OAuth وGoogle Drive API.</div>
+<div id="syncMsg" class="small" style="margin-top:8px">الحالة: غير مرتبط</div>
+</div>
+</section>
+</main>
+</div>
+<div id="modal" class="modal"><div class="modal-box"><div class="modal-head"><h3 id="modalTitle" class="title" style="font-size:18px;margin:0">المتغيرات</h3><button class="close" onclick="closeModal()">إغلاق</button></div><div id="modalBody"></div></div></div>
+<div id="printArea" class="print-area"></div>
+<script>
+const KG_PER_PERSON=9, FEE_PER_PERSON=250, BAG_KG=50, DB_KEY='tahen_manager_v3';
+let db=loadDB();
+let settings=Object.assign({driveConnected:false,driveAccount:'',driveFileId:''},db.settings||{});
+let activePage='home';
+function loadDB(){try{return JSON.parse(localStorage.getItem(DB_KEY))||{families:[],distributions:{},variables:[],settings:{}}}catch(e){return {families:[],distributions:{},variables:[],settings:{}}}}
+function saveDB(sync=true){db.settings=settings;localStorage.setItem(DB_KEY,JSON.stringify(db)); if(sync)queueSync()}
+function uid(){return 'id_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function money(n){return Math.round(Number(n)||0).toLocaleString('en-US')+' د.ع'}
+function calc(m){m=Math.max(0,parseInt(m)||0);let kg=m*KG_PER_PERSON;return {people:m,kg,fee:m*FEE_PER_PERSON,bags:Math.floor(kg/BAG_KG),rem:kg%BAG_KG}}
+function nowInfo(){let d=new Date();return {date:d.toLocaleDateString('ar-IQ'),time:d.toLocaleTimeString('ar-IQ',{hour:'2-digit',minute:'2-digit'})}}
+function show(page){activePage=page;document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(page).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));if(page==='families')renderFamilies();if(page==='distribution')renderDistribution();if(page==='stats')renderStats();if(page==='settings')loadSettings()}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>show(b.dataset.page));
+function addFamily(){let name=document.getElementById('addName').value.trim();let members=parseInt(document.getElementById('addMembers').value);let notes=document.getElementById('addNotes').value.trim();if(!name||!Number.isInteger(members)||members<1){alert('أدخل اسم رب الأسرة وعدد الأفراد بشكل صحيح.');return}let f={id:uid(),name,members,notes,active:true,createdAt:new Date().toISOString()};db.families.push(f);saveDB();document.getElementById('addName').value='';document.getElementById('addMembers').value='';document.getElementById('addNotes').value='';alert('تمت إضافة العائلة بنجاح.');}
+function renderFamilies(){let q=(document.getElementById('familySearch')?.value||'').trim().toLowerCase();let arr=db.families.filter(f=>f.active!==false&&(!q||f.name.toLowerCase().includes(q)));let box=document.getElementById('familyList');if(!arr.length){box.innerHTML=q?'<div class="empty">لا توجد عوائل مطابقة للبحث.</div>':'<div class="empty">ابحث باسم رب الأسرة لعرض بيانات العائلة.</div>';return}box.innerHTML=arr.map(f=>familyCard(f,false)).join('')}
+function familyCard(f,dist=false){let c=calc(f.members);let note=f.notes?`<div class="detail"><span>الملاحظات</span><b>${esc(f.notes)}</b></div>`:'';return `<article class="family"><div class="family-name">${esc(f.name)}</div><div class="detail"><span>عدد أفراد الأسرة</span><b>${c.people} نفر</b></div><div class="detail"><span>حصة الطحين الشهرية</span><b>${c.kg} كغم</b></div><div class="detail"><span>التفصيل</span><b>${c.bags} كيس${c.rem?` و ${c.rem} كغم`:''}</b></div><div class="detail"><span>المبلغ المستحق</span><b class="money">${money(c.fee)}</b></div>${note}<div class="row no-print" style="margin-top:10px"><button class="btn btn-gold" onclick="openVariables('${f.id}')">المتغيرات</button>${!dist?`<button class="btn btn-secondary" onclick="editFamily('${f.id}')">تعديل الاسم/الملاحظات</button><button class="btn btn-danger" onclick="deleteFamily('${f.id}')">حذف العائلة بالكامل</button>`:''}</div></article>`}
+function editFamily(id){let f=db.families.find(x=>x.id===id);if(!f)return;let n=prompt('اسم رب الأسرة',f.name);if(n===null)return;let notes=prompt('الملاحظات',f.notes||'');if(n.trim()){f.name=n.trim();f.notes=notes??f.notes;saveDB();renderFamilies();}}
+function deleteFamily(id){let f=db.families.find(x=>x.id===id);if(!f)return;if(!confirm(`سيتم حذف عائلة «${f.name}» بالكامل، بما في ذلك سجلات استلامها في جميع الأشهر. هل تريد المتابعة؟`))return;db.families=db.families.filter(x=>x.id!==id);Object.keys(db.distributions||{}).forEach(month=>{let d=db.distributions[month];if(d&&d.records)delete d.records[id];});saveDB();renderFamilies();renderDistribution();renderStats();alert('تم حذف العائلة بالكامل.')}
+function openVariables(id){let f=db.families.find(x=>x.id===id);if(!f)return;document.getElementById('modalTitle').textContent='المتغيرات — '+f.name;document.getElementById('modalBody').innerHTML=`<p class="small">اختر نوع التغيير، ثم العدد من 0 إلى 20.</p><div class="var-actions"><button class="btn btn-ok" onclick="variableForm('${id}','add')">إضافة</button><button class="btn btn-danger" onclick="variableForm('${id}','delete')">حذف</button><button class="btn btn-secondary" onclick="variableForm('${id}','transfer')">نقل</button></div><div class="card" style="margin-top:12px;background:#f8fafc"><b>الحالة الحالية</b><div class="detail"><span>الأفراد</span><b>${f.members}</b></div><div class="detail"><span>الحصة</span><b>${calc(f.members).kg} كغم</b></div><div class="detail"><span>المبلغ</span><b>${money(calc(f.members).fee)}</b></div></div>`;document.getElementById('modal').classList.add('show')}
+function variableForm(id,type){let f=db.families.find(x=>x.id===id);if(!f)return;let label=type==='add'?'إضافة أفراد':type==='delete'?'حذف أفراد':'نقل أفراد';document.getElementById('modalBody').innerHTML=`<div class="card"><b>${label}</b><label class="label">اختر العدد (0 - 20)</label><select class="select" id="varCount">${Array.from({length:21},(_,i)=>`<option value="${i}">${i}</option>`).join('')}</select><button class="btn btn-primary full" style="margin-top:10px" onclick="applyVariable('${id}','${type}')">تطبيق المتغير</button></div>`}
+function applyVariable(id,type){let f=db.families.find(x=>x.id===id);let n=parseInt(document.getElementById('varCount').value);if(!f||n<0)return;if(type!=='add'&&n>f.members){alert('لا يمكن حذف/نقل عدد أكبر من أفراد الأسرة الحاليين.');return}let before=f.members;if(type==='add')f.members+=n;else f.members-=n;db.variables.push({id:uid(),familyId:id,type,count:n,before,after:f.members,date:new Date().toISOString()});saveDB();closeModal();renderFamilies();renderDistribution();alert(`تمت العملية. عدد الأفراد الآن: ${f.members}`)}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function distKey(){return document.getElementById('distMonth')?.value||new Date().toISOString().slice(0,7)}
+function ensureDist(month){
+  if(!db.distributions[month]) db.distributions[month]={month,distributor:'',date:'',time:'',records:{}};
+  let d=db.distributions[month];
+
+  // النظام يعتمد على الشهر والسنة فقط: لكل شهر سجل توزيع واحد مستقل.
+  // ترحيل تلقائي لبيانات النسخ القديمة التي كانت تستخدم "الحصص":
+  // نأخذ آخر حصة مستخدمة حتى لا تضيع آخر حالة مسجلة، ثم نحذف بنية الحصص.
+  if(d.rounds && typeof d.rounds==='object'){
+    let keys=Object.keys(d.rounds).map(Number).filter(Number.isFinite).sort((a,b)=>a-b);
+    let last=keys.length?keys[keys.length-1]:1;
+    if((!d.records || !Object.keys(d.records).length) && d.rounds[last] && d.rounds[last].records){
+      d.records=d.rounds[last].records;
+    }
+    delete d.rounds;
+    delete d.activeRound;
+    saveDB();
+  }
+  if(!d.records || typeof d.records!=='object') d.records={};
+  return d;
+}
+function onDistributionPeriodChange(){
+  let month=document.getElementById('distMonth').value||new Date().toISOString().slice(0,7);
+  ensureDist(month);loadDistFields();renderDistribution();renderStats();
+}
+function saveDistributionSetup(){
+  let month=document.getElementById('distMonth').value||new Date().toISOString().slice(0,7);
+  let distributor=document.getElementById('distributor').value.trim();
+  if(!distributor){alert('أدخل اسم الموزع.');return}
+  let d=ensureDist(month);
+  d.distributor=distributor;
+  if(!d.date||!d.time){let x=nowInfo();d.date=x.date;d.time=x.time}
+  saveDB();renderDistribution();alert('تم حفظ بيانات التوزيع.');
+}
+function loadDistFields(){
+  let month=document.getElementById('distMonth').value||new Date().toISOString().slice(0,7);
+  document.getElementById('distMonth').value=month;
+  let d=ensureDist(month);
+  document.getElementById('distributor').value=d.distributor||'';
+  document.getElementById('distDate').textContent=d.date||nowInfo().date;
+  document.getElementById('distTime').textContent=d.time||nowInfo().time;
+}
+function getRec(month,id){
+  let d=ensureDist(month);
+  if(!d.records[id])d.records[id]={bag:false,rem:false,paid:0,receivedKg:0,delivered:false,status:'none',updatedAt:''};
+  let r=d.records[id];
+  if(typeof r.delivered!=='boolean')r.delivered=false;
+  if(!r.status)r.status='none';
+  if(typeof r.paid!=='number')r.paid=Number(r.paid)||0;
+  return r
+}
+function calcReceived(c,r){return (r.bag?c.bags*BAG_KG:0)+(r.rem?c.rem:0)}
+function statusInfo(c,r){let got=calcReceived(c,r);if(!r.delivered || got<=0)return {key:'none',label:'غير مستلم',cls:'pill-red'};if(got>=c.kg)return {key:'full',label:'مستلم بالكامل',cls:'pill-ok'};return {key:'partial',label:'مستلم جزئي',cls:'pill-warn'};}
+function renderDistribution(){let month=document.getElementById('distMonth').value||new Date().toISOString().slice(0,7);let d=ensureDist(month);document.getElementById('distributor').value=d.distributor||'';document.getElementById('distDate').textContent=d.date||nowInfo().date;document.getElementById('distTime').textContent=d.time||nowInfo().time;let q=(document.getElementById('distSearch')?.value||'').trim().toLowerCase();let box=document.getElementById('distList');if(!q){box.innerHTML='<div class="empty">🔎 ابحث باسم رب الأسرة لعرض بيانات التوزيع.</div>';renderOutstanding(month,'');return}let arr=db.families.filter(f=>f.active!==false&&f.name.toLowerCase().includes(q));box.innerHTML=arr.length?arr.map(f=>distributionCard(f,month)).join(''):'<div class="empty">لا توجد عوائل مطابقة للبحث.</div>';renderOutstanding(month,q)}
+function distributionCard(f,month){let c=calc(f.members),r=getRec(month,f.id),receivedKg=calcReceived(c,r),outstanding=Math.max(0,c.kg-receivedKg),st=statusInfo(c,r);let selected=!!(r.bag||r.rem);let amount=selected?c.fee:0;return `<article class="family"><div class="family-name">${esc(f.name)}</div><div class="detail"><span>عدد أفراد الأسرة</span><b>${c.people}</b></div><div class="detail"><span>الحصة الشهرية</span><b>${c.kg} كغم = ${c.bags} كيس${c.rem?` و ${c.rem} كغم`:''}</b></div><div class="detail"><span>المبلغ المستحق</span><b>${money(c.fee)}</b></div><div class="detail"><span>الحالة</span><b><span class="pill ${st.cls}">${st.label}</span></b></div><div class="checkline"><label style="margin:0;flex:1">استلام الأكياس (${c.bags} كيس)</label><input type="checkbox" ${r.bag?'checked':''} onchange="setReceive('${month}','${f.id}','bag',this.checked)"></div><div class="checkline"><label style="margin:0;flex:1">استلام الكيلوات فوق الكيس (${c.rem} كغم)</label><input type="checkbox" ${r.rem?'checked':''} ${c.rem===0?'disabled':''} onchange="setReceive('${month}','${f.id}','rem',this.checked)"></div><div class="detail"><span>المبلغ المستلم فعلياً</span><b class="money">${money(amount)}</b></div><div class="detail"><span>الكمية المستلمة</span><b>${receivedKg} كغم</b></div><div class="detail"><span>الكمية المتبقية عند الموزع</span><b>${outstanding} كغم</b></div><button class="btn btn-primary full" style="margin-top:10px" onclick="deliverFamily('${month}','${f.id}')">✓ تسليم وتسجيل الاستلام</button></article>`}
+function setReceive(month,id,type,val){let r=getRec(month,id);r[type]=!!val;r.paid=(r.bag||r.rem)?calc(db.families.find(f=>f.id===id).members).fee:0;r.updatedAt=new Date().toISOString();saveDB();renderDistribution();renderStats()}
+function deliverFamily(month,id){let f=db.families.find(x=>x.id===id);if(!f)return;let c=calc(f.members),r=getRec(month,id),got=calcReceived(c,r);if(got<=0){alert('حدد أولاً الكيس أو الكيلوات التي تم تسليمها.');return}r.delivered=true;r.paid=c.fee;r.receivedKg=got;r.status=got>=c.kg?'full':'partial';r.updatedAt=new Date().toISOString();saveDB();renderDistribution();renderStats();}
+function setPaid(month,id,val){let r=getRec(month,id),f=db.families.find(x=>x.id===id);if(f){r.paid=(r.bag||r.rem)?calc(f.members).fee:0;r.updatedAt=new Date().toISOString();saveDB();renderDistribution();renderStats()}}
+function renderOutstanding(month,q=''){let query=String(q||'').trim().toLowerCase();if(!query){document.getElementById('outstandingList').innerHTML='<div class="empty" style="padding:12px">ابحث باسم رب الأسرة لعرض المستحقات غير المستلمة.</div>';return}let rows=db.families.filter(f=>f.active!==false&&f.name.toLowerCase().includes(query)).map(f=>{let c=calc(f.members),r=getRec(month,f.id),got=calcReceived(c,r),left=Math.max(0,c.kg-got);return left>0?{name:f.name,left}:null}).filter(Boolean);document.getElementById('outstandingList').innerHTML=rows.length?rows.map(x=>`<div class="detail"><span>رب الأسرة</span><b>${esc(x.name)}</b></div><div class="detail"><span>الحصة غير المستلمة</span><b>${x.left} كغم</b></div>`).join(''):'<div class="empty" style="padding:12px">لا توجد مستحقات غير مستلمة لهذه العائلة.</div>'}
+
+function statRows(month){
+  let all=db.families.filter(f=>f.active!==false).map(f=>{
+    let c=calc(f.members),r=getRec(month,f.id),got=calcReceived(c,r),left=Math.max(0,c.kg-got);
+    let st=statusInfo(c,r);
+    return {f,c,r,got,left,status:st.key};
+  });
+  return {
+    all,
+    full:all.filter(x=>x.status==='full'),
+    partial:all.filter(x=>x.status==='partial'),
+    none:all.filter(x=>x.status==='none')
+  };
+}
+function renderStats(){
+  let month=document.getElementById('statsMonth')?.value||new Date().toISOString().slice(0,7);
+  let g=statRows(month);
+  let totalKg=g.all.reduce((s,x)=>s+x.got,0);
+  let totalMoney=g.all.reduce((s,x)=>s+(x.r.delivered?Number(x.r.paid)||0:0),0);
+  let totalFamilies=g.all.length;
+  document.getElementById('statsCards').innerHTML=
+    `<div class="stat"><span>إجمالي الأسر</span><b>${totalFamilies}</b></div>
+     <div class="stat"><span>إجمالي الكمية المستلمة</span><b>${totalKg} كغم</b></div>
+     <div class="stat"><span>إجمالي المبلغ المحصل</span><b>${money(totalMoney)}</b></div>
+     <div class="stat"><span>المستلمون بالكامل</span><b>${g.full.length}</b></div>`;
+  let buttons=[
+    ['all','قائمة جميع الأسر',g.all.length,'btn-secondary'],
+    ['full','قائمة الأسر المستلمة بالكامل',g.full.length,'btn-ok'],
+    ['partial','قائمة الأسر المستلمة جزئياً',g.partial.length,'btn-gold'],
+    ['none','قائمة الأسر غير المستلمة إطلاقاً',g.none.length,'btn-danger']
+  ];
+  document.getElementById('statsCategoryButtons').innerHTML=buttons.map(([key,label,count,cls])=>
+    `<button class="btn ${cls} stat-btn" onclick="openStatsCategory('${key}')">
+       <span>${label}</span>
+       <span style="float:left;min-width:42px;text-align:center;background:#ffffffaa;border-radius:999px;padding:2px 8px">${count}</span>
+     </button>`).join('');
+  document.getElementById('statsLists').innerHTML='';
+}
+function openStatsCategory(category){
+  let month=document.getElementById('statsMonth')?.value||new Date().toISOString().slice(0,7);
+  let g=statRows(month), arr=category==='all'?g.all:g[category]||[];
+  let titles={all:'قائمة جميع الأسر',full:'قائمة الأسر المستلمة بالكامل',partial:'قائمة الأسر المستلمة جزئياً',none:'قائمة الأسر غير المستلمة إطلاقاً'};
+  document.getElementById('modalTitle').textContent=titles[category]||'القائمة';
+  document.getElementById('modalBody').innerHTML=
+    `<input class="input search" id="statsModalSearch" placeholder="🔎 بحث داخل هذه القائمة" oninput="filterStatsModal('${category}')">
+     <div id="statsModalList">${statsModalRowsHtml(arr)}</div>`;
+  document.getElementById('modal').classList.add('show');
+}
+function statsModalRowsHtml(arr){
+  if(!arr.length)return '<div class="empty">لا توجد أسر في هذه القائمة لهذا الشهر.</div>';
+  return arr.map(x=>{
+    let st=statusInfo(x.c,x.r);
+    return `<article class="family">
+      <div class="family-name">${esc(x.f.name)}</div>
+      <div class="detail"><span>عدد أفراد الأسرة</span><b>${x.c.people}</b></div>
+      <div class="detail"><span>الحصة الشهرية</span><b>${x.c.kg} كغم</b></div>
+      <div class="detail"><span>المستلم فعلياً</span><b>${x.got} كغم</b></div>
+      <div class="detail"><span>المتبقي</span><b>${x.left} كغم</b></div>
+      <div class="detail"><span>الحالة</span><b><span class="pill ${st.cls}">${st.label}</span></b></div>
+    </article>`;
+  }).join('');
+}
+function filterStatsModal(category){
+  let month=document.getElementById('statsMonth')?.value||new Date().toISOString().slice(0,7);
+  let g=statRows(month), arr=category==='all'?g.all:g[category]||[];
+  let q=(document.getElementById('statsModalSearch')?.value||'').trim().toLowerCase();
+  let filtered=q?arr.filter(x=>x.f.name.toLowerCase().includes(q)):arr;
+  document.getElementById('statsModalList').innerHTML=statsModalRowsHtml(filtered);
+}
+function printCategory(category){let month=document.getElementById('statsMonth').value||new Date().toISOString().slice(0,7),groups=statRows(month),arr=category==='all'?groups.all:groups[category]||[];let d=ensureDist(month),title=category==='full'?'قائمة المستلمين بالكامل':category==='partial'?'قائمة المستلمين جزئياً':category==='none'?'قائمة غير المستلمين بالكامل':'كشف جميع الأسر';document.getElementById('printArea').innerHTML=`<h1>${title}</h1><p>الشهر: ${esc(month)} — الموزع: ${esc(d.distributor||'—')}</p><p>إجمالي المبالغ المحصلة: ${money(groups.all.reduce((s,x)=>s+(x.r.delivered?Number(x.r.paid)||0:0),0))}</p>${arr.map(x=>{let st=statusInfo(x.c,x.r);return `<div class="family"><div class="family-name">${esc(x.f.name)}</div><div class="detail"><span>الحصة الشهرية</span><b>${x.c.kg} كغم</b></div><div class="detail"><span>المستلم فعلياً</span><b>${x.got} كغم</b></div><div class="detail"><span>المتبقي</span><b>${x.left} كغم</b></div><div class="detail"><span>المبلغ المستلم</span><b>${money(x.r.delivered?x.r.paid:0)}</b></div><div class="detail"><span>الحالة</span><b>${st.label}</b></div></div>`}).join('')}`;window.print()}
+function exportBackup(){let payload={app:'برنامج توزيع الطحين',version:3,createdAt:new Date().toISOString(),data:db};let blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='نسخة_احتياطية_توزيع_الطحين_'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function importBackup(ev){let file=ev.target.files[0];if(!file)return;let fr=new FileReader();fr.onload=()=>{try{let p=JSON.parse(fr.result);if(!p.data||!Array.isArray(p.data.families)||!p.data.distributions)throw 0;if(confirm('سيتم استبدال البيانات الحالية. هل تريد المتابعة؟')){db=p.data;settings=Object.assign(settings,db.settings||{});saveDB(false);alert('تمت الاستعادة بنجاح.');renderFamilies();renderDistribution();renderStats()}}catch(e){alert('ملف النسخة الاحتياطية غير صالح.')}ev.target.value=''};fr.readAsText(file)}
+function loadSettings(){
+ const connected=!!settings.driveConnected;
+ const st=document.getElementById('driveStatus'), badge=document.getElementById('driveBadge');
+ if(st)st.textContent=connected?('مرتبط'+(settings.driveAccount?' — '+settings.driveAccount:'')):'غير مرتبط';
+ if(badge){badge.textContent=connected?'مرتبط':'غير مرتبط';badge.className='pill '+(connected?'pill-ok':'pill-warn')}
+ if(!connected)document.getElementById('syncMsg').textContent='الحالة: غير مرتبط';
+}
+function saveSettings(){saveDB(false);loadSettings();document.getElementById('syncMsg').textContent='تم حفظ الإعدادات.'}
+function connectGoogleDrive(){
+ const b=window.AndroidGoogleDrive;
+ if(b&&typeof b.signIn==='function'){try{b.signIn();return}catch(e){}}
+ document.getElementById('syncMsg').textContent='الـAPK الحالي يحتاج جسر Android لتسجيل Google OAuth قبل الاتصال الفعلي.';
+}
+function disconnectGoogleDrive(){
+ const b=window.AndroidGoogleDrive;try{if(b&&typeof b.signOut==='function')b.signOut()}catch(e){}
+ settings.driveConnected=false;settings.driveAccount='';settings.driveFileId='';saveDB(false);loadSettings();document.getElementById('syncMsg').textContent='تم فصل الحساب.';
+}
+let syncTimer=null;
+function queueSync(){clearTimeout(syncTimer);syncTimer=setTimeout(()=>driveBackup(true),1200)}
+async function driveBackup(silent=false){
+  const payload=JSON.stringify({app:'Flour Distribution Manager',version:3,updatedAt:new Date().toISOString(),data:db});
+  try{
+    if(window.AndroidGoogleDrive && typeof window.AndroidGoogleDrive.saveBackup==='function'){
+      await window.AndroidGoogleDrive.saveBackup(payload,'FlourDistributionManager_Backup.json');
+      document.getElementById('syncMsg').textContent='تمت المزامنة مع Google Drive.';
+      if(!silent) alert('تم حفظ النسخة الاحتياطية في Google Drive بنجاح.');
+      return true;
+    }
+    if(window.webkit?.messageHandlers?.googleDrive){
+      window.webkit.messageHandlers.googleDrive.postMessage({action:'backup',filename:'FlourDistributionManager_Backup.json',data:payload});
+      document.getElementById('syncMsg').textContent='تم إرسال النسخة إلى جسر Google Drive.';
+      if(!silent) alert('تم إرسال طلب النسخ الاحتياطي إلى Google Drive.');
+      return true;
+    }
+    if(!silent) alert('نسخة التطبيق الحالية لا تحتوي على جسر Google Drive. يجب إعادة تغليفها بمُغلّف يدعم Google OAuth وDrive API.');
+    return false;
+  }catch(e){if(!silent) alert('تعذر النسخ إلى Google Drive: '+e.message);return false}
+}
+async function driveRestore(){
+  try{
+    let raw=null;
+    if(window.AndroidGoogleDrive && typeof window.AndroidGoogleDrive.restoreBackup==='function') raw=await window.AndroidGoogleDrive.restoreBackup('FlourDistributionManager_Backup.json');
+    else if(window.webkit?.messageHandlers?.googleDrive){window.webkit.messageHandlers.googleDrive.postMessage({action:'restore',filename:'FlourDistributionManager_Backup.json'});document.getElementById('syncMsg').textContent='تم إرسال طلب الاستعادة إلى Google Drive.';return;}
+    else {alert('نسخة التطبيق الحالية لا تحتوي على جسر Google Drive. يجب إعادة تغليفها بمُغلّف يدعم Google OAuth وDrive API.');return}
+    if(raw){let obj=typeof raw==='string'?JSON.parse(raw):raw;if(!obj.data||!Array.isArray(obj.data.families))throw new Error('نسخة غير صالحة');db=obj.data;saveDB(false);renderFamilies();renderDistribution();renderStats();document.getElementById('syncMsg').textContent='تمت الاستعادة من Google Drive.';alert('تمت استعادة البيانات بنجاح.');}
+  }catch(e){alert('تعذرت الاستعادة: '+e.message)}
+}
+function init(){let n=nowInfo();document.getElementById('distMonth').value=new Date().toISOString().slice(0,7);document.getElementById('statsMonth').value=new Date().toISOString().slice(0,7);loadDistFields();loadSettings();renderFamilies();renderDistribution();renderStats()}
+init();
+</script>
+<script>
+// Google Drive integration bridge: the Android wrapper should expose
+// window.AndroidGoogleDrive.saveBackup(data, filename) and restoreBackup(filename).
+// No Google Sheets or Apps Script is used by this version.
+</script>
+</body>
+</html>
