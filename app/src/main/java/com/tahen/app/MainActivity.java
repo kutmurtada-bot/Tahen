@@ -3,6 +3,7 @@ package com.tahen.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintJob;
@@ -17,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
 
@@ -41,6 +43,7 @@ public class MainActivity extends Activity {
     private static final int RC_GOOGLE_SIGN_IN = 7001;
     private static final String DRIVE_FILE_SCOPE =
             "https://www.googleapis.com/auth/drive.file";
+    private static final String TAG = "TahenGoogleDrive";
 
     private WebView webView;
     private WebView printWebView;
@@ -65,27 +68,44 @@ public class MainActivity extends Activity {
         googleAccount = GoogleSignIn.getLastSignedInAccount(this);
     }
 
+    private GoogleSignInOptions googleSignInOptions() {
+        return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestProfile()
+                .requestScopes(new Scope(DRIVE_FILE_SCOPE))
+                .build();
+    }
+
     public void startGoogleDriveSignIn() {
         runOnUiThread(() -> {
-            Scope driveScope = new Scope(DRIVE_FILE_SCOPE);
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
-                    GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestEmail()
-                    .requestProfile()
-                    .requestScopes(driveScope)
-                    .build();
-
-            GoogleSignInClient client = GoogleSignIn.getClient(this, gso);
+            GoogleSignInClient client = GoogleSignIn.getClient(this, googleSignInOptions());
             client.silentSignIn().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    googleAccount = task.getResult();
-                    notifyWeb("signin", true, "تم ربط حساب Google: " +
-                            safeAccountName(googleAccount), "");
+                    GoogleSignInAccount account = task.getResult();
+                    if (hasDriveScope(account)) {
+                        completeGoogleSignIn(account);
+                    } else {
+                        startActivityForResult(client.getSignInIntent(), RC_GOOGLE_SIGN_IN);
+                    }
                 } else {
                     startActivityForResult(client.getSignInIntent(), RC_GOOGLE_SIGN_IN);
                 }
             });
         });
+    }
+
+    private boolean hasDriveScope(GoogleSignInAccount account) {
+        if (account == null || account.getGrantedScopes() == null) return false;
+        for (Scope scope : account.getGrantedScopes()) {
+            if (DRIVE_FILE_SCOPE.equals(scope.getScopeUri())) return true;
+        }
+        return false;
+    }
+
+    private void completeGoogleSignIn(GoogleSignInAccount account) {
+        googleAccount = account;
+        Log.d(TAG, "Google sign-in succeeded for " + safeAccountName(account));
+        notifyWeb("signin", true, "تم ربط حساب Google: " + safeAccountName(account), "");
     }
 
     private String safeAccountName(GoogleSignInAccount account) {
@@ -103,13 +123,33 @@ public class MainActivity extends Activity {
         Task<GoogleSignInAccount> task =
                 GoogleSignIn.getSignedInAccountFromIntent(data);
         try {
-            googleAccount = task.getResult(ApiException.class);
-            notifyWeb("signin", true, "تم ربط حساب Google: " +
-                    safeAccountName(googleAccount), "");
+            GoogleSignInAccount account = task.getResult(ApiException.class);
+            if (account == null) {
+                notifyWeb("signin", false, "Google لم يُرجع حساباً صالحاً.", "");
+                return;
+            }
+            if (!hasDriveScope(account)) {
+                notifyWeb("signin", false,
+                        "تم اختيار الحساب لكن لم تُمنح صلاحية Google Drive للتطبيق. أعد المحاولة واسمح بالوصول إلى Drive.",
+                        "");
+                return;
+            }
+            completeGoogleSignIn(account);
         } catch (ApiException e) {
-            notifyWeb("signin", false,
-                    "تعذر تسجيل الدخول إلى Google. تأكد من إعداد OAuth وSHA-1.",
-                    "");
+            int code = e.getStatusCode();
+            String codeName = GoogleSignInStatusCodes.getStatusCodeString(code);
+            Log.e(TAG, "Google sign-in failed: code=" + code + " (" + codeName + ")", e);
+            String message;
+            if (code == 10) {
+                message = "Google رفض التطبيق بسبب إعداد OAuth. رمز الخطأ 10 (DEVELOPER_ERROR). يجب تسجيل package com.tahen.app مع SHA-1 الخاص بالـAPK في Google Cloud Console، ثم إعادة بناء التطبيق.";
+            } else if (code == 12501) {
+                message = "تم إلغاء تسجيل الدخول إلى Google.";
+            } else if (code == 7) {
+                message = "لا يوجد اتصال بالإنترنت. تحقق من الاتصال ثم حاول مرة أخرى.";
+            } else {
+                message = "فشل ربط Google. رمز الخطأ: " + code + " (" + codeName + ").";
+            }
+            notifyWeb("signin", false, message, "statusCode=" + code + ";status=" + codeName);
         }
     }
 
@@ -185,13 +225,7 @@ public class MainActivity extends Activity {
         try {
             return GoogleAuthUtil.getToken(this, googleAccount.getAccount(), scope);
         } catch (Exception first) {
-            GoogleSignInClient client = GoogleSignIn.getClient(
-                    this,
-                    new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                            .requestEmail()
-                            .requestScopes(new Scope(DRIVE_FILE_SCOPE))
-                            .build()
-            );
+            GoogleSignInClient client = GoogleSignIn.getClient(this, googleSignInOptions());
             client.revokeAccess();
             throw first;
         }
