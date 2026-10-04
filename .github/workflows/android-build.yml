@@ -25,11 +25,13 @@ jobs:
           echo "/tmp/gradle-8.9/bin" >> "$GITHUB_PATH"
           gradle --version
 
-      - name: Show signing fingerprints
-        run: gradle :app:signingReport | tee signing-report.txt
-
+      # 1. بناء الـ APK أولاً لتوليد ملف الـ debug.keystore
       - name: Build debug APK
         run: gradle :app:assembleDebug --stacktrace
+
+      # 2. طباعة الـ SHA1 بعد إنشاء المفتاح
+      - name: Show signing fingerprints
+        run: gradle :app:signingReport | tee signing-report.txt
 
       - name: Verify APK
         run: |
