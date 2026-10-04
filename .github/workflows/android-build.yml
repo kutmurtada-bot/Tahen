@@ -18,14 +18,18 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Make Gradle executable
-        run: chmod +x gradlew
+      - name: Install Gradle 8.9
+        run: |
+          curl -L --fail -o /tmp/gradle.zip https://services.gradle.org/distributions/gradle-8.9-bin.zip
+          unzip -q /tmp/gradle.zip -d /tmp
+          echo "/tmp/gradle-8.9/bin" >> "$GITHUB_PATH"
+          gradle --version
 
       - name: Show signing fingerprints
-        run: ./gradlew signingReport | tee signing-report.txt
+        run: gradle :app:signingReport | tee signing-report.txt
 
       - name: Build debug APK
-        run: ./gradlew :app:assembleDebug
+        run: gradle :app:assembleDebug --stacktrace
 
       - name: Verify APK
         run: |
