@@ -24,6 +24,9 @@ public class MainActivity extends Activity {
 
         webView.setWebViewClient(new WebViewClient());
 
+        // JavaScript bridge used by the web app for Google Drive integration.
+        webView.addJavascriptInterface(new DriveBridge(this), "AndroidGoogleDrive");
+
         webView.loadUrl("file:///android_asset/index.html");
 
         setContentView(webView);
