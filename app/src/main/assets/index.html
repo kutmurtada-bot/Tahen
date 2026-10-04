@@ -294,7 +294,7 @@ function filterStatsModal(category){
   let filtered=q?arr.filter(x=>x.f.name.toLowerCase().includes(q)):arr;
   document.getElementById('statsModalList').innerHTML=statsModalRowsHtml(filtered);
 }
-function printCategory(category){let month=document.getElementById('statsMonth').value||new Date().toISOString().slice(0,7),groups=statRows(month),arr=category==='all'?groups.all:groups[category]||[];let d=ensureDist(month),title=category==='full'?'قائمة المستلمين بالكامل':category==='partial'?'قائمة المستلمين جزئياً':category==='none'?'قائمة غير المستلمين بالكامل':'كشف جميع الأسر';document.getElementById('printArea').innerHTML=`<h1>${title}</h1><p>الشهر: ${esc(month)} — الموزع: ${esc(d.distributor||'—')}</p><p>إجمالي المبالغ المحصلة: ${money(groups.all.reduce((s,x)=>s+(x.r.delivered?Number(x.r.paid)||0:0),0))}</p>${arr.map(x=>{let st=statusInfo(x.c,x.r);return `<div class="family"><div class="family-name">${esc(x.f.name)}</div><div class="detail"><span>الحصة الشهرية</span><b>${x.c.kg} كغم</b></div><div class="detail"><span>المستلم فعلياً</span><b>${x.got} كغم</b></div><div class="detail"><span>المتبقي</span><b>${x.left} كغم</b></div><div class="detail"><span>المبلغ المستلم</span><b>${money(x.r.delivered?x.r.paid:0)}</b></div><div class="detail"><span>الحالة</span><b>${st.label}</b></div></div>`}).join('')}`;window.print()}
+function printCategory(category){let month=document.getElementById('statsMonth').value||new Date().toISOString().slice(0,7),groups=statRows(month),arr=category==='all'?groups.all:groups[category]||[],d=ensureDist(month),title=category==='full'?'قائمة المستلمين بالكامل':category==='partial'?'قائمة المستلمين جزئياً':category==='none'?'قائمة غير المستلمين':'كشف جميع الأسر';let html=`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>body{font-family:Tahoma,Arial,sans-serif;padding:24px;color:#111}h1{font-size:24px;margin-bottom:8px}.family{border:1px solid #ddd;border-radius:10px;padding:12px;margin:0 0 10px;break-inside:avoid}.family-name{font-size:18px;font-weight:800;margin-bottom:8px}.detail{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #eee}.detail:last-child{border-bottom:0}</style></head><body><h1>${title}</h1><p>الشهر: ${esc(month)} — الموزع: ${esc(d.distributor||'—')}</p><p>إجمالي المبالغ المحصلة: ${money(groups.all.reduce((s,x)=>s+(x.r.delivered?Number(x.r.paid)||0:0),0))}</p>${arr.map(x=>{let st=statusInfo(x.c,x.r);return `<div class="family"><div class="family-name">${esc(x.f.name)}</div><div class="detail"><span>الحصة الشهرية</span><b>${x.c.kg} كغم</b></div><div class="detail"><span>المستلم فعلياً</span><b>${x.got} كغم</b></div><div class="detail"><span>المتبقي</span><b>${x.left} كغم</b></div><div class="detail"><span>المبلغ المستلم</span><b>${money(x.r.delivered?x.r.paid:0)}</b></div><div class="detail"><span>الحالة</span><b>${st.label}</b></div></div>`}).join('')}</body></html>`;let bridge=window.AndroidGoogleDrive;if(bridge&&typeof bridge.printHtml==='function'){bridge.printHtml(html,title)}else{document.getElementById('printArea').innerHTML=html;alert('ميزة الطباعة متاحة بعد تثبيت النسخة الجديدة من التطبيق.')}}
 function exportBackup(){let payload={app:'برنامج توزيع الطحين',version:3,createdAt:new Date().toISOString(),data:db};let blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='نسخة_احتياطية_توزيع_الطحين_'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 function importBackup(ev){let file=ev.target.files[0];if(!file)return;let fr=new FileReader();fr.onload=()=>{try{let p=JSON.parse(fr.result);if(!p.data||!Array.isArray(p.data.families)||!p.data.distributions)throw 0;if(confirm('سيتم استبدال البيانات الحالية. هل تريد المتابعة؟')){db=p.data;settings=Object.assign(settings,db.settings||{});saveDB(false);alert('تمت الاستعادة بنجاح.');renderFamilies();renderDistribution();renderStats()}}catch(e){alert('ملف النسخة الاحتياطية غير صالح.')}ev.target.value=''};fr.readAsText(file)}
 function loadSettings(){
@@ -305,45 +305,13 @@ function loadSettings(){
  if(!connected)document.getElementById('syncMsg').textContent='الحالة: غير مرتبط';
 }
 function saveSettings(){saveDB(false);loadSettings();document.getElementById('syncMsg').textContent='تم حفظ الإعدادات.'}
-function connectGoogleDrive(){
- const b=window.AndroidGoogleDrive;
- if(b&&typeof b.signIn==='function'){try{b.signIn();return}catch(e){}}
- document.getElementById('syncMsg').textContent='الـAPK الحالي يحتاج جسر Android لتسجيل Google OAuth قبل الاتصال الفعلي.';
-}
-function disconnectGoogleDrive(){
- const b=window.AndroidGoogleDrive;try{if(b&&typeof b.signOut==='function')b.signOut()}catch(e){}
- settings.driveConnected=false;settings.driveAccount='';settings.driveFileId='';saveDB(false);loadSettings();document.getElementById('syncMsg').textContent='تم فصل الحساب.';
-}
+function connectGoogleDrive(){const b=window.AndroidGoogleDrive;if(b&&typeof b.signIn==='function'){b.signIn();return}document.getElementById('syncMsg').textContent='ثبّت النسخة الجديدة لتفعيل Google Drive.'}
+function disconnectGoogleDrive(){const b=window.AndroidGoogleDrive;if(b&&typeof b.signOut==='function')b.signOut();settings.driveConnected=false;settings.driveAccount='';settings.driveFileId='';saveDB(false);loadSettings();document.getElementById('syncMsg').textContent='تم فصل الحساب.'}
+function onAndroidDriveResult(action,ok,message,data){if(action==='signin'&&ok){settings.driveConnected=true;settings.driveAccount=message.replace('تم ربط حساب Google: ','');saveDB(false);loadSettings();document.getElementById('syncMsg').textContent=message;return}if(action==='signout'&&ok){settings.driveConnected=false;settings.driveAccount='';settings.driveFileId='';saveDB(false);loadSettings();document.getElementById('syncMsg').textContent=message;return}if(action==='backup'){if(ok){settings.driveConnected=true;if(data)settings.driveFileId=data;saveDB(false);loadSettings()}document.getElementById('syncMsg').textContent=message;alert(message);return}if(action==='restore'){if(ok){try{let obj=JSON.parse(data);if(!obj.data||!Array.isArray(obj.data.families))throw new Error('نسخة غير صالحة');db=obj.data;settings=Object.assign(settings,db.settings||{});saveDB(false);renderFamilies();renderDistribution();renderStats();loadSettings();document.getElementById('syncMsg').textContent=message;alert(message)}catch(e){alert('تعذرت الاستعادة: '+e.message)}}else{document.getElementById('syncMsg').textContent=message;alert(message)}}}
 let syncTimer=null;
 function queueSync(){clearTimeout(syncTimer);syncTimer=setTimeout(()=>driveBackup(true),1200)}
-async function driveBackup(silent=false){
-  const payload=JSON.stringify({app:'Flour Distribution Manager',version:3,updatedAt:new Date().toISOString(),data:db});
-  try{
-    if(window.AndroidGoogleDrive && typeof window.AndroidGoogleDrive.saveBackup==='function'){
-      await window.AndroidGoogleDrive.saveBackup(payload,'FlourDistributionManager_Backup.json');
-      document.getElementById('syncMsg').textContent='تمت المزامنة مع Google Drive.';
-      if(!silent) alert('تم حفظ النسخة الاحتياطية في Google Drive بنجاح.');
-      return true;
-    }
-    if(window.webkit?.messageHandlers?.googleDrive){
-      window.webkit.messageHandlers.googleDrive.postMessage({action:'backup',filename:'FlourDistributionManager_Backup.json',data:payload});
-      document.getElementById('syncMsg').textContent='تم إرسال النسخة إلى جسر Google Drive.';
-      if(!silent) alert('تم إرسال طلب النسخ الاحتياطي إلى Google Drive.');
-      return true;
-    }
-    if(!silent) alert('نسخة التطبيق الحالية لا تحتوي على جسر Google Drive. يجب إعادة تغليفها بمُغلّف يدعم Google OAuth وDrive API.');
-    return false;
-  }catch(e){if(!silent) alert('تعذر النسخ إلى Google Drive: '+e.message);return false}
-}
-async function driveRestore(){
-  try{
-    let raw=null;
-    if(window.AndroidGoogleDrive && typeof window.AndroidGoogleDrive.restoreBackup==='function') raw=await window.AndroidGoogleDrive.restoreBackup('FlourDistributionManager_Backup.json');
-    else if(window.webkit?.messageHandlers?.googleDrive){window.webkit.messageHandlers.googleDrive.postMessage({action:'restore',filename:'FlourDistributionManager_Backup.json'});document.getElementById('syncMsg').textContent='تم إرسال طلب الاستعادة إلى Google Drive.';return;}
-    else {alert('نسخة التطبيق الحالية لا تحتوي على جسر Google Drive. يجب إعادة تغليفها بمُغلّف يدعم Google OAuth وDrive API.');return}
-    if(raw){let obj=typeof raw==='string'?JSON.parse(raw):raw;if(!obj.data||!Array.isArray(obj.data.families))throw new Error('نسخة غير صالحة');db=obj.data;saveDB(false);renderFamilies();renderDistribution();renderStats();document.getElementById('syncMsg').textContent='تمت الاستعادة من Google Drive.';alert('تمت استعادة البيانات بنجاح.');}
-  }catch(e){alert('تعذرت الاستعادة: '+e.message)}
-}
+function driveBackup(silent=false){const payload=JSON.stringify({app:'Flour Distribution Manager',version:3,updatedAt:new Date().toISOString(),data:db});const b=window.AndroidGoogleDrive;if(b&&typeof b.saveBackup==='function'){b.saveBackup(payload,'FlourDistributionManager_Backup.json');if(!silent)document.getElementById('syncMsg').textContent='جاري رفع النسخة إلى Google Drive...';return true}if(!silent)alert('اربط Google Drive أولاً.');return false}
+function driveRestore(){const b=window.AndroidGoogleDrive;if(b&&typeof b.restoreBackup==='function'){b.restoreBackup('FlourDistributionManager_Backup.json');document.getElementById('syncMsg').textContent='جاري استعادة النسخة من Google Drive...';return}alert('ثبّت النسخة الجديدة لتفعيل Google Drive.')}
 function init(){let n=nowInfo();document.getElementById('distMonth').value=new Date().toISOString().slice(0,7);document.getElementById('statsMonth').value=new Date().toISOString().slice(0,7);loadDistFields();loadSettings();renderFamilies();renderDistribution();renderStats()}
 init();
 </script>
