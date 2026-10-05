@@ -60,12 +60,31 @@ public class MainActivity extends Activity {
         settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                injectDeleteFamilyFix();
+            }
+        });
         webView.addJavascriptInterface(new DriveBridge(this), "AndroidGoogleDrive");
         webView.loadUrl("file:///android_asset/index.html");
         setContentView(webView);
 
         googleAccount = GoogleSignIn.getLastSignedInAccount(this);
+    }
+
+    private void injectDeleteFamilyFix() {
+        try (InputStream in = getAssets().open("delete-fix.js")) {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buffer = new byte[4096];
+            int n;
+            while ((n = in.read(buffer)) != -1) out.write(buffer, 0, n);
+            String script = new String(out.toByteArray(), StandardCharsets.UTF_8);
+            webView.evaluateJavascript(script, null);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to inject delete-family fix", e);
+        }
     }
 
     private GoogleSignInOptions googleSignInOptions() {
@@ -232,8 +251,7 @@ public class MainActivity extends Activity {
     }
 
     private String findFile(String token, String filename) throws Exception {
-        String q = "name='" + filename.replace("'", "\\'") +
-                "' and trashed=false";
+        String q = "name='" + filename.replace("'", "\\'") + "' and trashed=false";
         String url = "https://www.googleapis.com/drive/v3/files?q=" +
                 URLEncoder.encode(q, "UTF-8") +
                 "&spaces=drive&pageSize=1&fields=files(id,name)";
@@ -259,8 +277,7 @@ public class MainActivity extends Activity {
             method = "POST";
         } else {
             endpoint = "https://www.googleapis.com/upload/drive/v3/files/" +
-                    URLEncoder.encode(existingId, "UTF-8") +
-                    "?uploadType=multipart";
+                    URLEncoder.encode(existingId, "UTF-8") + "?uploadType=multipart";
             method = "PATCH";
         }
 
@@ -269,8 +286,7 @@ public class MainActivity extends Activity {
                 metadata.getBytes(StandardCharsets.UTF_8));
         writePart(body, boundary, "application/json; charset=UTF-8",
                 data.getBytes(StandardCharsets.UTF_8));
-        body.write(("--" + boundary + "--\r\n")
-                .getBytes(StandardCharsets.UTF_8));
+        body.write(("--" + boundary + "--\r\n").getBytes(StandardCharsets.UTF_8));
 
         JSONObject result = requestJson(method, endpoint, token,
                 body.toByteArray(), "multipart/related; boundary=" + boundary);
@@ -368,7 +384,7 @@ public class MainActivity extends Activity {
                     if (printManager != null) {
                         PrintDocumentAdapter adapter =
                                 view.createPrintDocumentAdapter(jobName);
-                        PrintJob job = printManager.print(
+                        printManager.print(
                                 jobName, adapter, new PrintAttributes.Builder().build());
                     }
                 }
